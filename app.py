@@ -1,14 +1,11 @@
+import os
+from dotenv import load_dotenv
+load_dotenv()
 from flask import Flask, render_template, request, redirect, url_for, flash, session, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_mail import Mail, Message
 from itsdangerous import URLSafeTimedSerializer
-import os
 from datetime import datetime, timedelta
-from dotenv import load_dotenv
-import os
-
-load_dotenv()
-
 import sqlalchemy
 from auth import register_user, login_user, get_user_email
 import numpy as np
@@ -1013,7 +1010,9 @@ def get_available_slots():
         app.logger.error(f"Error in get_available_slots: {str(e)}")
         return jsonify({'error': 'Server error', 'available_slots': []}), 500
 
+
+
 if __name__ == '__main__':
     with app.app_context():
-        db.create_all()  # Only create tables if they don't exist; don't drop!
-    app.run(debug=True, port=5000)
+        db.create_all()
+    app.run(host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
